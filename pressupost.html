@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto Tri3LAB - Cofradía de Pescadores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        triOrange: '#F36622',
+                        seaBlue: '#0A2540',
+                        lightSea: '#E8F1F8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        
+        .editable-active {
+            outline: 2px dashed #F36622;
+            outline-offset: 4px;
+            background-color: rgba(243, 102, 34, 0.05);
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .editable-active:hover {
+            background-color: rgba(243, 102, 34, 0.1);
+        }
+
+        /* Ocultar elementos en la impresión PDF */
+        .pdf-hide { display: block; }
+        .pdf-exporting .pdf-hide { display: none !important; }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen pb-12">
+
+    <!-- Barra de Herramientas -->
+    <div class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 pdf-hide border-b-4 border-triOrange">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap gap-2 justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-anchor text-seaBlue"></i>
+                <span class="font-semibold text-seaBlue hidden sm:inline">Panel de Control Tri3LAB</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button id="editBtn" onclick="toggleEdit()" class="bg-lightSea text-seaBlue px-3 md:px-4 py-2 rounded-md hover:bg-blue-100 transition font-medium flex items-center gap-2 text-sm md:text-base">
+                    <i class="fa-solid fa-pen"></i> <span id="editText">Habilitar Edición</span>
+                </button>
+                <button onclick="downloadHTML()" class="bg-slate-200 text-slate-700 px-3 md:px-4 py-2 rounded-md hover:bg-slate-300 transition font-medium flex items-center gap-2 text-sm md:text-base shadow-sm">
+                    <i class="fa-solid fa-download"></i> <span class="hidden md:inline">Guardar Archivo</span> HTML
+                </button>
+                <button onclick="generatePDF()" class="bg-triOrange text-white px-3 md:px-4 py-2 rounded-md hover:bg-orange-600 transition font-medium flex items-center gap-2 shadow-sm text-sm md:text-base">
+                    <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del Documento -->
+    <div class="max-w-4xl mx-auto mt-28 md:mt-24 bg-white shadow-xl min-h-[1056px] relative" id="document-container">
+        
+        <div id="content-area" class="p-10 md:p-16 bg-white h-full">
+            
+            <!-- Cabecera / Logo -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-slate-200 pb-6 mb-8">
+                <!-- Simulación CSS del Logo Tri3LAB -->
+                <div class="flex items-center gap-3 mb-4 md:mb-0">
+                    <div class="grid grid-cols-2 gap-1 w-12 h-12">
+                        <div class="bg-triOrange"></div>
+                        <div class="bg-transparent"></div>
+                        <div class="bg-triOrange"></div>
+                        <div class="bg-triOrange"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900" style="letter-spacing: -1px;">Tri3<span class="text-gray-800">LAB</span></h1>
+                        <p class="text-[10px] tracking-[0.2em] text-gray-500 uppercase font-semibold mt-1">Strategy - Creativity - Impact</p>
+                    </div>
+                </div>
+                
+                <div class="text-right text-sm text-slate-500">
+                    <p class="font-semibold text-seaBlue"><i class="fa-solid fa-fish text-triOrange mr-1"></i> Sector Pesquero / Cofradías</p>
+                    <p>Fecha: <span class="editable" contenteditable="false">9 de abril</span></p>
+                    <p>Ref: <span class="editable" contenteditable="false">01</span></p>
+                </div>
+            </div>
+
+            <!-- Título Principal -->
+            <div class="mb-10 text-center">
+                <h2 class="text-2xl font-bold text-seaBlue uppercase tracking-wide border-b-2 border-triOrange inline-block pb-2 px-4 editable" contenteditable="false">Propuesta de Servicios de Comunicación</h2>
+            </div>
+
+            <!-- Definición de Conceptos -->
+            <div class="bg-lightSea border-l-4 border-triOrange p-6 mb-10 rounded-r-lg">
+                <h3 class="text-lg font-bold text-seaBlue mb-3 flex items-center gap-2"><i class="fa-solid fa-book-open text-triOrange"></i> Definición de Conceptos</h3>
+                <ul class="space-y-2 text-sm text-slate-700 editable" contenteditable="false">
+                    <li><strong class="text-seaBlue">Estrategia de comunicación:</strong> Consultoría, diagnóstico y hoja de ruta para definir el rumbo de la marca y enfoque comercial.</li>
+                    <li><strong class="text-seaBlue">Identidad visual:</strong> Creación/diseño de elementos gráficos, manual de identidad (Brandbook) y adaptaciones (sello de calidad).</li>
+                    <li><strong class="text-seaBlue">Servicios Audiovisuales:</strong> Producción de vídeo y fotografía (preproducción, rodaje, edición final).</li>
+                    <li><strong class="text-seaBlue">Página Web:</strong> Diseño, desarrollo, redacción, hosting y actualización mediante blog.</li>
+                    <li><strong class="text-seaBlue">Redes Sociales:</strong> Configuración, creación de contenido y programación para construir comunidad.</li>
+                </ul>
+            </div>
+
+            <!-- Salto de página para que el Plan A empiece en una página nueva y no se corte -->
+            <div class="html2pdf__page-break"></div>
+            <div class="h-16 w-full"></div> <!-- Espaciador para generar margen superior en la nueva página -->
+
+            <!-- Opción A -->
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-seaBlue text-white w-10 h-10 flex items-center justify-center font-bold text-xl rounded-md shadow-md">A</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-seaBlue editable" contenteditable="false">PLAN INTEGRAL</h3>
+                        <p class="text-sm text-slate-500 editable" contenteditable="false">Despliegue e impacto máximo en todas las plataformas.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden rounded-lg shadow-sm border border-slate-200">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-seaBlue text-white">
+                            <tr>
+                                <th class="py-3 px-4 font-semibold w-1/2">Concepto</th>
+                                <th class="py-3 px-4 font-semibold text-center w-1/6">P.U.</th>
+                                <th class="py-3 px-4 font-semibold text-center w-1/6">Cant.</th>
+                                <th class="py-3 px-4 font-semibold text-right w-1/6">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 editable" contenteditable="false">
+                            <tr class="bg-slate-50 font-bold text-seaBlue"><td colspan="3" class="py-2 px-4">ESTRATEGIA DE COMUNICACIÓN</td><td class="py-2 px-4 text-right">4.800,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Comercial</td><td class="py-2 px-4 text-center">1.000,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">1.000,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Gestión de cliente</td><td class="py-2 px-4 text-center">800,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">800,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Diagnóstico y plan de acción</td><td class="py-2 px-4 text-center">3.000,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">3.000,00 €</td></tr>
+                            
+                            <tr class="bg-slate-50 font-bold text-seaBlue"><td colspan="3" class="py-2 px-4">IDENTIDAD VISUAL</td><td class="py-2 px-4 text-right">1.500,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Brandbook y nueva identidad visual</td><td class="py-2 px-4 text-center">1.000,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">1.000,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Nuevo sello "Peix de..."</td><td class="py-2 px-4 text-center">500,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">500,00 €</td></tr>
+
+                            <tr class="bg-slate-50 font-bold text-seaBlue"><td colspan="3" class="py-2 px-4">SERVICIOS AUDIOVISUALES</td><td class="py-2 px-4 text-right">4.150,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Coordinación y seguimiento</td><td class="py-2 px-4 text-center">500,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">500,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Planificación y preproducción</td><td class="py-2 px-4 text-center">200,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">200,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Jornada de filmación (incl. material bruto)</td><td class="py-2 px-4 text-center">250,00 €</td><td class="py-2 px-4 text-center">4</td><td class="py-2 px-4 text-right">1.000,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Photobook (selección y edición)</td><td class="py-2 px-4 text-center">100,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">100,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Vídeo divulgativo (lanzamiento/imagen)</td><td class="py-2 px-4 text-center">350,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">350,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Paquete de 10 reels verticales</td><td class="py-2 px-4 text-center">1.000,00 €</td><td class="py-2 px-4 text-center">2</td><td class="py-2 px-4 text-right">2.000,00 €</td></tr>
+
+                            <tr class="bg-slate-50 font-bold text-seaBlue"><td colspan="3" class="py-2 px-4">PÁGINA WEB</td><td class="py-2 px-4 text-right">6.500,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Revisión y seguimiento</td><td class="py-2 px-4 text-center">800,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">800,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Diseño</td><td class="py-2 px-4 text-center">3.000,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">3.000,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Hosting (incluye mantenimiento)</td><td class="py-2 px-4 text-center">300,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">300,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Margen de seguridad</td><td class="py-2 px-4 text-center">1.000,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">1.000,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Contenido texto WEB</td><td class="py-2 px-4 text-center">800,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">800,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Post blog</td><td class="py-2 px-4 text-center">100,00 €</td><td class="py-2 px-4 text-center">6</td><td class="py-2 px-4 text-right">600,00 €</td></tr>
+
+                            <tr class="bg-slate-50 font-bold text-seaBlue"><td colspan="3" class="py-2 px-4">REDES SOCIALES (Proyección 6 meses)</td><td class="py-2 px-4 text-right">3.080,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Instagram - Apertura de red</td><td class="py-2 px-4 text-center">100,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">100,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Instagram - Programación (4 reels/mes)</td><td class="py-2 px-4 text-center">120,00 €</td><td class="py-2 px-4 text-center">6</td><td class="py-2 px-4 text-right">720,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">Instagram - Creación/progr. (4 cont./mes)</td><td class="py-2 px-4 text-center">240,00 €</td><td class="py-2 px-4 text-center">6</td><td class="py-2 px-4 text-right">1.440,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">LinkedIn - Apertura de red</td><td class="py-2 px-4 text-center">100,00 €</td><td class="py-2 px-4 text-center">1</td><td class="py-2 px-4 text-right">100,00 €</td></tr>
+                            <tr><td class="py-2 px-4 pl-8">LinkedIn - Programación (4 reels/mes)</td><td class="py-2 px-4 text-center">120,00 €</td><td class="py-2 px-4 text-center">6</td><td class="py-2 px-4 text-right">720,00 €</td></tr>
+                        </tbody>
+                        <tfoot class="bg-triOrange text-white font-bold text-lg">
+                            <tr>
+                                <td colspan="3" class="py-4 px-4 uppercase text-right">Total Opción A</td>
+                                <td class="py-4 px-4 text-right editable" contenteditable="false">20.030,00 €</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Page Break para PDF si es necesario -->
+            <div class="html2pdf__page-break"></div>
+            <div class="h-16 w-full"></div> <!-- Espaciador para generar margen superior en la nueva página -->
+
+            <!-- Opción B -->
+            <div class="mb-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-white border-2 border-seaBlue text-seaBlue w-10 h-10 flex items-center justify-center font-bold text-xl rounded-md shadow-sm">B</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-seaBlue editable" contenteditable="false">PLAN ESENCIAL</h3>
+                        <p class="text-sm text-slate-500 editable" contenteditable="false">Versión optimizada centrada en lanzamiento estratégico (Instagram).</p>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden rounded-lg shadow-sm border border-slate-200">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-seaBlue text-white">
+                            <tr>
+                                <th class="py-3 px-4 font-semibold w-1/4">Concepto</th>
+                                <th class="py-3 px-4 font-semibold w-7/12">Descripción resumida</th>
+                                <th class="py-3 px-4 font-semibold text-right w-1/6">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 editable" contenteditable="false">
+                            <tr>
+                                <td class="py-3 px-4 font-semibold text-seaBlue">ESTRATEGIA COMUNICACIÓN</td>
+                                <td class="py-3 px-4">Plan completo (Comercial, Gestión y Diagnóstico)</td>
+                                <td class="py-3 px-4 text-right font-medium">4.800,00 €</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold text-seaBlue">IDENTIDAD VISUAL</td>
+                                <td class="py-3 px-4">Plan completo (Brandbook y Nuevo sello)</td>
+                                <td class="py-3 px-4 text-right font-medium">1.500,00 €</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold text-seaBlue">SERVICIOS AUDIOVISUALES</td>
+                                <td class="py-3 px-4">Coordinación, 1 Jornada filmación, Photobook, Vídeo div. y 10 reels</td>
+                                <td class="py-3 px-4 text-right font-medium">2.400,00 €</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold text-seaBlue">PÁGINA WEB</td>
+                                <td class="py-3 px-4">Diseño web completo, Hosting, Textos y 3 Posts de blog (arranque)</td>
+                                <td class="py-3 px-4 text-right font-medium">5.200,00 €</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-semibold text-seaBlue">REDES SOCIALES</td>
+                                <td class="py-3 px-4">Focalización IG: Apertura, creación y programación (6 meses)</td>
+                                <td class="py-3 px-4 text-right font-medium">2.260,00 €</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bg-seaBlue text-white font-bold text-lg">
+                            <tr>
+                                <td colspan="2" class="py-4 px-4 uppercase text-right">Total Opción B</td>
+                                <td class="py-4 px-4 text-right text-triOrange editable" contenteditable="false">16.160,00 €</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Condiciones -->
+            <div class="mt-12 pt-6 border-t border-slate-300 text-xs text-slate-500 editable" contenteditable="false">
+                <p class="font-bold mb-1 text-slate-700">Condiciones Generales:</p>
+                <ul class="list-disc pl-4 space-y-1">
+                    <li>Los importes detallados no incluyen el IVA correspondiente (21%).</li>
+                    <li>Forma de pago: 30% a la aceptación del presupuesto y 60% a la entrega final / puesta en marcha.</li>
+                    <li>Presupuesto válido durante 30 días a partir de la fecha de emisión.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let isEditing = false;
+
+        // Cargar datos guardados localmente al iniciar
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedContent = localStorage.getItem('tri3lab_presupuesto_data');
+            if (savedContent) {
+                document.getElementById('content-area').innerHTML = savedContent;
+            }
+        });
+
+        function toggleEdit() {
+            isEditing = !isEditing;
+            const editables = document.querySelectorAll('.editable');
+            const btnText = document.getElementById('editText');
+            const btnIcon = document.querySelector('#editBtn i');
+            const editBtn = document.getElementById('editBtn');
+
+            editables.forEach(el => {
+                el.contentEditable = isEditing;
+                if(isEditing) {
+                    el.classList.add('editable-active');
+                } else {
+                    el.classList.remove('editable-active');
+                }
+            });
+
+            if (isEditing) {
+                btnText.textContent = "Guardar Cambios";
+                btnIcon.className = "fa-solid fa-save";
+                editBtn.classList.remove('bg-lightSea', 'text-seaBlue');
+                editBtn.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                btnText.textContent = "Habilitar Edición";
+                btnIcon.className = "fa-solid fa-pen";
+                editBtn.classList.add('bg-lightSea', 'text-seaBlue');
+                editBtn.classList.remove('bg-green-100', 'text-green-700');
+                
+                // Guardar en el navegador automáticamente al quitar el modo edición
+                const contentHTML = document.getElementById('content-area').innerHTML;
+                localStorage.setItem('tri3lab_presupuesto_data', contentHTML);
+            }
+        }
+
+        function downloadHTML() {
+            // Si está editando, cierra el modo edición para guardar cambios y quitar bordes
+            if(isEditing) {
+                toggleEdit();
+            }
+
+            // Obtener todo el HTML actual
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            
+            // Crear archivo descargable
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = 'Presupuesto_Tri3LAB_Editado.html';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpieza
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function generatePDF() {
+            // Si está editando, cerrar modo edición primero para quitar bordes
+            if(isEditing) {
+                toggleEdit();
+            }
+
+            const element = document.getElementById('document-container');
+            const opt = {
+                margin:       0,
+                filename:     'Presupuesto_Tri3LAB.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Añadir clase temporal para ocultar elementos UI (botones) y aplicar estilos print
+            document.body.classList.add('pdf-exporting');
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                // Restaurar vista
+                document.body.classList.remove('pdf-exporting');
+            });
+        }
+    </script>
+</body>
+</html>
