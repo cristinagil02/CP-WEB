@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -43,11 +43,38 @@
         /* Ocultar elementos en la impresión PDF */
         .pdf-hide { display: block; }
         .pdf-exporting .pdf-hide { display: none !important; }
+        
+        /* Asegurar que los radio buttons se impriman bien */
+        input[type="radio"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 2px solid #94a3b8;
+            border-radius: 50%;
+            display: grid;
+            place-content: center;
+        }
+        input[type="radio"]::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            border-radius: 50%;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em #F36622;
+        }
+        input[type="radio"]:checked::before {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen pb-12">
 
-    <!-- Barra de Herramientas -->
     <div class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 pdf-hide border-b-4 border-triOrange">
         <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap gap-2 justify-between items-center">
             <div class="flex items-center gap-3">
@@ -68,14 +95,11 @@
         </div>
     </div>
 
-    <!-- Contenedor del Documento -->
     <div class="max-w-4xl mx-auto mt-28 md:mt-24 bg-white shadow-xl min-h-[1056px] relative" id="document-container">
         
         <div id="content-area" class="p-10 md:p-16 bg-white h-full">
             
-            <!-- Cabecera / Logo -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-slate-200 pb-6 mb-8">
-                <!-- Simulación CSS del Logo Tri3LAB -->
                 <div class="flex items-center gap-3 mb-4 md:mb-0">
                     <div class="grid grid-cols-2 gap-1 w-12 h-12">
                         <div class="bg-triOrange"></div>
@@ -96,12 +120,24 @@
                 </div>
             </div>
 
-            <!-- Título Principal -->
-            <div class="mb-10 text-center">
+            <div class="mb-6 text-center">
                 <h2 class="text-2xl font-bold text-seaBlue uppercase tracking-wide border-b-2 border-triOrange inline-block pb-2 px-4 editable" contenteditable="false">Propuesta de Servicios de Comunicación</h2>
             </div>
 
-            <!-- Definición de Conceptos -->
+            <div class="mb-8 text-slate-600 text-sm md:text-base editable" contenteditable="false">
+                <p class="mb-3">Hemos diseñado dos opciones de colaboración para que podáis evaluar el alcance que mejor se adapte a las necesidades y ritmo actual del proyecto:</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-seaBlue mb-1"><span class="bg-seaBlue text-white px-2 py-0.5 rounded text-xs mr-2">OPCIÓN A</span> Plan Integral</h4>
+                        <p class="text-sm">Despliegue completo en todas las plataformas (Web, Instagram, LinkedIn) con máxima producción audiovisual para un impacto potente desde el primer día.</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <h4 class="font-bold text-seaBlue mb-1"><span class="bg-white border text-seaBlue px-2 py-0.5 rounded text-xs mr-2">OPCIÓN B</span> Plan Esencial</h4>
+                        <p class="text-sm">Versión optimizada centrada en arrancar estratégicamente. Focaliza el esfuerzo inicial únicamente en Instagram para consolidar un canal antes de expandirse.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-lightSea border-l-4 border-triOrange p-6 mb-10 rounded-r-lg">
                 <h3 class="text-lg font-bold text-seaBlue mb-3 flex items-center gap-2"><i class="fa-solid fa-book-open text-triOrange"></i> Definición de Conceptos</h3>
                 <ul class="space-y-2 text-sm text-slate-700 editable" contenteditable="false">
@@ -113,17 +149,14 @@
                 </ul>
             </div>
 
-            <!-- Salto de página para que el Plan A empiece en una página nueva y no se corte -->
             <div class="html2pdf__page-break"></div>
-            <div class="h-16 w-full"></div> <!-- Espaciador para generar margen superior en la nueva página -->
+            <div class="h-16 w-full"></div>
 
-            <!-- Opción A -->
             <div class="mb-12">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="bg-seaBlue text-white w-10 h-10 flex items-center justify-center font-bold text-xl rounded-md shadow-md">A</div>
                     <div>
                         <h3 class="text-xl font-bold text-seaBlue editable" contenteditable="false">PLAN INTEGRAL</h3>
-                        <p class="text-sm text-slate-500 editable" contenteditable="false">Despliegue e impacto máximo en todas las plataformas.</p>
                     </div>
                 </div>
 
@@ -180,17 +213,14 @@
                 </div>
             </div>
 
-            <!-- Page Break para PDF si es necesario -->
             <div class="html2pdf__page-break"></div>
-            <div class="h-16 w-full"></div> <!-- Espaciador para generar margen superior en la nueva página -->
+            <div class="h-16 w-full"></div>
 
-            <!-- Opción B -->
             <div class="mb-10">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="bg-white border-2 border-seaBlue text-seaBlue w-10 h-10 flex items-center justify-center font-bold text-xl rounded-md shadow-sm">B</div>
                     <div>
                         <h3 class="text-xl font-bold text-seaBlue editable" contenteditable="false">PLAN ESENCIAL</h3>
-                        <p class="text-sm text-slate-500 editable" contenteditable="false">Versión optimizada centrada en lanzamiento estratégico (Instagram).</p>
                     </div>
                 </div>
 
@@ -240,8 +270,118 @@
                 </div>
             </div>
 
-            <!-- Condiciones -->
-            <div class="mt-12 pt-6 border-t border-slate-300 text-xs text-slate-500 editable" contenteditable="false">
+            <!-- Cronograma -->
+            <div class="html2pdf__page-break"></div>
+            <div class="h-16 w-full"></div>
+
+            <div class="mb-10">
+                <h3 class="text-xl font-bold text-seaBlue mb-4 border-b-2 border-triOrange inline-block pb-1 editable" contenteditable="false">Cronograma de Ejecución (6 Meses)</h3>
+                <p class="text-sm text-slate-600 mb-6 editable" contenteditable="false">El plan seleccionado se ejecutará de forma integral durante un plazo de <strong>6 meses</strong>. A continuación, se presenta una propuesta de calendarización estimativa de las fases clave. Al igual que el resto del documento, esta tabla puede editarse para ajustar las prioridades del proyecto.</p>
+                
+                <div class="overflow-x-auto rounded-lg shadow-sm border border-slate-200">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-seaBlue text-white">
+                            <tr>
+                                <th class="py-3 px-4 font-semibold w-1/4">Fase / Tarea</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 1</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 2</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 3</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 4</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 5</th>
+                                <th class="py-3 px-2 font-semibold text-center border-l border-slate-600">Mes 6</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 editable" contenteditable="false">
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Estrategia y Diagnóstico</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Desarrollo</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Cierre</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Identidad Visual</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Conceptos</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Entregables</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Producción Audiovisual</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center bg-slate-50 text-seaBlue font-medium border-l border-slate-100">Preproducción</td>
+                                <td class="py-3 px-2 text-center bg-slate-50 text-seaBlue font-medium border-l border-slate-100">Rodaje/Edición</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Diseño y Desarrollo Web</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Estructura</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Contenidos</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Lanzamiento</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Redes Sociales (Setup)</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center bg-slate-50 text-seaBlue font-medium border-l border-slate-100">Estrategia</td>
+                                <td class="py-3 px-2 text-center bg-slate-50 text-seaBlue font-medium border-l border-slate-100">Apertura</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 font-bold text-seaBlue">Gestión Mensual (RRSS, Blog)</td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center border-l border-slate-100"></td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Continuo</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Continuo</td>
+                                <td class="py-3 px-2 text-center bg-orange-50 text-triOrange font-medium border-l border-slate-100">Continuo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Selección de Opción y Aprobación -->
+            <div class="mt-12 bg-slate-50 border-2 border-slate-200 rounded-lg p-6 editable" contenteditable="false">
+                <h3 class="text-lg font-bold text-seaBlue mb-4 border-b pb-2"><i class="fa-solid fa-file-signature text-triOrange"></i> Selección y Aprobación</h3>
+                <p class="text-sm text-slate-600 mb-5">Por favor, indicad la opción seleccionada para proceder con el inicio del proyecto:</p>
+                
+                <div class="flex flex-col md:flex-row gap-4 mb-8">
+                    <label class="flex items-center gap-3 p-4 border border-slate-300 rounded cursor-pointer hover:bg-white transition bg-white w-full">
+                        <input type="radio" name="opcion_elegida" class="cursor-pointer">
+                        <span class="font-bold text-seaBlue">Aprobar OPCIÓN A (Plan Integral)</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-4 border border-slate-300 rounded cursor-pointer hover:bg-white transition bg-white w-full">
+                        <input type="radio" name="opcion_elegida" class="cursor-pointer">
+                        <span class="font-bold text-seaBlue">Aprobar OPCIÓN B (Plan Esencial)</span>
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-8 pt-4">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-12">Por Tri3LAB</p>
+                        <div class="border-b border-slate-400 w-full mb-2"></div>
+                        <p class="text-sm text-slate-600">Firma y Fecha</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-12">Por el Cliente (Aceptación)</p>
+                        <div class="border-b border-slate-400 w-full mb-2"></div>
+                        <p class="text-sm text-slate-600">Firma, Cargo y Fecha</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-300 text-xs text-slate-500 editable" contenteditable="false">
                 <p class="font-bold mb-1 text-slate-700">Condiciones Generales:</p>
                 <ul class="list-disc pl-4 space-y-1">
                     <li>Los importes detallados no incluyen el IVA correspondiente (21%).</li>
@@ -260,9 +400,24 @@
         window.addEventListener('DOMContentLoaded', () => {
             const savedContent = localStorage.getItem('tri3lab_presupuesto_data');
             if (savedContent) {
+                // Restauramos HTML, pero tenemos cuidado con los radios que podrían perder su estado visual
                 document.getElementById('content-area').innerHTML = savedContent;
             }
+            setupRadioListeners();
         });
+
+        // Aseguramos que los clicks en los radios actualicen el HTML subyacente para poder guardarlo
+        function setupRadioListeners() {
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    radios.forEach(r => r.removeAttribute('checked'));
+                    if(this.checked) {
+                        this.setAttribute('checked', 'checked');
+                    }
+                });
+            });
+        }
 
         function toggleEdit() {
             isEditing = !isEditing;
@@ -294,38 +449,28 @@
                 // Guardar en el navegador automáticamente al quitar el modo edición
                 const contentHTML = document.getElementById('content-area').innerHTML;
                 localStorage.setItem('tri3lab_presupuesto_data', contentHTML);
+                setupRadioListeners(); // Reconectar tras edición
             }
         }
 
         function downloadHTML() {
-            // Si está editando, cierra el modo edición para guardar cambios y quitar bordes
-            if(isEditing) {
-                toggleEdit();
-            }
-
-            // Obtener todo el HTML actual
-            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            if(isEditing) toggleEdit();
             
-            // Crear archivo descargable
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             
             a.href = url;
-            a.download = 'Presupuesto_Tri3LAB_Editado.html';
+            a.download = 'Presupuesto_Tri3LAB.html';
             document.body.appendChild(a);
             a.click();
-            
-            // Limpieza
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
 
         function generatePDF() {
-            // Si está editando, cerrar modo edición primero para quitar bordes
-            if(isEditing) {
-                toggleEdit();
-            }
+            if(isEditing) toggleEdit();
 
             const element = document.getElementById('document-container');
             const opt = {
@@ -336,11 +481,8 @@
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
-            // Añadir clase temporal para ocultar elementos UI (botones) y aplicar estilos print
             document.body.classList.add('pdf-exporting');
-
             html2pdf().set(opt).from(element).save().then(() => {
-                // Restaurar vista
                 document.body.classList.remove('pdf-exporting');
             });
         }
